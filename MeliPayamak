@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+
+
+USERNAME=myUsername
+PASS=abc123
+FROM=500000
+PHONE=${1}
+MESSAGE=${2}
+
+# This echo is only for my /var/run/zabbix/log/log.out script
+echo "date +%H:%M:%: Sending SMS Text to $1"
+
+#
+# Posting the SMS via HTTP API
+# 
+#
+http "https://api.payamak-panel.com/post/Send.asmx/SendSimpleSMS2?username=$USERNAME&password=$PASS&to=$PHONE&from=$FROM&text=$MESSAGE&isflash=false"
+
+echo "date +%H:%M:%: SMS Text sent to $1"
+echo "MESSAGE: $2"
