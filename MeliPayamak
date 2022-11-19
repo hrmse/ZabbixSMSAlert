@@ -8,6 +8,9 @@ FROM=500000
 PHONE=${1}
 MESSAGE=${2}
 
+
+sudo apt install httpie -y
+
 # This echo is only for my /var/run/zabbix/log/log.out script
 echo "date +%H:%M:%: Sending SMS Text to $1"
 
@@ -19,3 +22,21 @@ http "https://api.payamak-panel.com/post/Send.asmx/SendSimpleSMS2?username=$USER
 
 echo "date +%H:%M:%: SMS Text sent to $1"
 echo "MESSAGE: $2"
+
+#Instructions
+#How to add the script to Zabbix (Tested on Zabbix Server 3.4):
+
+#Administration > Media Types
+#Add a new "Script" media Type
+#		Name: ClickSend - SMS
+#		Type: Script
+#		Script name: send_sms.sh
+#		Script parameters:
+#		PARAMETER 1: {ALERT.SENDTO}
+#		PARAMETER 2: {ALERT.MESSAGE}
+
+#Create an action and make sure it has the "SEND SMS" enabled on it.
+#Copy the script send_sms.sh to your Zabbix server on: /usr/lib/zabbix/alertscripts
+#Add permission to the file:
+#		chmod +x /usr/lib/zabbix/alertscripts/send_sms.sh
+#		chown zabbix:zabbix /usr/lib/zabbix/alertscripts/send_sms.sh
